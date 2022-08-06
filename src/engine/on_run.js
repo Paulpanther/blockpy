@@ -18,75 +18,15 @@ export const WRAP_INSTRUCTOR_CODE = function (studentCode, instructorCode, quick
     // TODO: Add in Sk.queuedInput to be passed in
 
     return `
-# Support our sysmodules hack by clearing out any lingering old data
-from pedal.core.report import MAIN_REPORT
-MAIN_REPORT.clear()
-
-from cisc108 import student_tests
-student_tests.reset()
-
 from utility import *
 
-# Load in some commonly used tools
-from pedal.cait.cait_api import parse_program
-from pedal.sandbox.commands import *
-from pedal.core.commands import *
-
-from pedal.environments.blockpy import setup_environment
 # Do we execute student's code?
 skip_run = get_model_info('assignment.settings.disableInstructorRun')
 inputs = None if skip_run else get_model_info('execution.input')
 
-# Initialize the BlockPy environment
-pedal = setup_environment(skip_tifa=${skip_tifa},
-                          skip_run=skip_run,
-                          inputs=inputs,
-                          main_file='answer.py',
-                          main_code=${safeCode})
-student = pedal.fields['student']
-
-# TODO: Refactor resolver to return instructions
-# Monkey-patch questions
-#from pedal import questions
-#questions.show_question = set_instructions
 
 # Run the actual instructor code
 ${instructorCode}
-
-# Resolve everything
-from pedal.resolvers.simple import resolve
-final = resolve()
-SUCCESS = final.success
-SCORE = final.score
-CATEGORY = final.category
-LABEL = final.title
-MESSAGE = final.message
-DATA = final.data
-HIDE = final.hide_correctness
-
-# Handle questions
-if final.instructions:
-    set_instructions(final.instructions[-1].message)
-    
-# Handle positive feedback
-POSITIVE = []
-for positive in final.positives:
-    message = positive.message
-    if not positive:
-        message = positive.else_message
-    POSITIVE.append({
-        "title": positive.title,
-        "label": positive.label,
-        "message": message
-    })
-    
-# Handle system messages
-for system in final.systems:
-    if system.label == 'log':
-        console_log(system.title, system.message);
-    if system.label == 'debug':
-        console_debug(system.title, system.message);
-
 `;
 };
 

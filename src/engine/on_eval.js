@@ -13,59 +13,17 @@ export const WRAP_INSTRUCTOR_CODE = function (studentCode, instructorCode, quick
     return `
 from utility import *
 
-# Load in some commonly used tools
-from pedal.cait.cait_api import parse_program
-from pedal.sandbox.commands import *
-from pedal.core.commands import *
-
-# Backup the feedback
-on_run_feedback = []
-for feedback in MAIN_REPORT.feedback:
-    on_run_feedback.append(feedback)
-MAIN_REPORT.feedback.clear()
-
-from pedal.environments.blockpy import setup_environment
 # Add in evaluated stuff from last time
 student = get_sandbox()
+
 # TODO: What about new inputs since we last ran/evaled?
 MAIN_REPORT.submission.files['evaluation'] = ${safeCode}
 evaluate(${safeCode})
 
-# TODO: Refactor resolver to return instructions
-# Monkey-patch questions
-#from pedal import questions
-#questions.show_question = set_instructions
 
 # Run the actual instructor code
 ${instructorCode}
 
-# Resolve everything
-from pedal.resolvers.simple import resolve
-final = resolve()
-SUCCESS = final.success
-SCORE = final.score
-CATEGORY = final.category
-LABEL = final.title
-MESSAGE = final.message
-DATA = final.data
-HIDE = final.hide_correctness
-
-# Handle questions
-if final.instructions:
-    set_instructions(final.instructions[-1].message)
-    
-# Handle positive feedback
-POSITIVE = []
-for positive in final.positives:
-    message = positive.message
-    if not positive:
-        message = positive.else_message
-    POSITIVE.append({
-        "title": positive.title,
-        "label": positive.label,
-        "message": message
-    })
-    
 # Handle system messages
 for system in final.systems:
     if system.label == 'log':

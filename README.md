@@ -66,6 +66,8 @@ $> git clone https://github.com/pedal-edu/curriculum-ctvt curriculum-ctvt
 $> git clone https://github.com/pedal-edu/curriculum-sneks curriculum-sneks
 ```
 
+Also checkout commit `9b6d15a3bc387f5fd0af6cd0e22ba16fbcdda91c` of blockly
+
 4. To actually install the BlockPy client, you can do the following:
 
 ```
