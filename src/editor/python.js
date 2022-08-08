@@ -10,6 +10,7 @@
  */
 import {AbstractEditor, sluggify} from "./abstract_editor";
 import {HISTORY_TOOLBAR_HTML} from "../history";
+import {addToGlobalHistory, GlobalTextHistory} from "../blockpy";
 
 export let DisplayModes = {
     BLOCK: "block",
@@ -262,6 +263,7 @@ class PythonEditorView extends AbstractEditor {
             this.main.components.fileSystem.deleteFileLocally_(this.filename);
             return;
         }
+        addToGlobalHistory({ content: newContents });
         this.dirty = !this.dirty;
         if (this.dirty) {
             this.dirty = true;

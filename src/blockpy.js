@@ -34,6 +34,15 @@ import {capitalize} from "./utilities";
 
 export {_IMPORTED_COMPLETE_DATASETS, _IMPORTED_DATASETS};
 
+export const GlobalTextHistory = [];
+
+export const addToGlobalHistory = addition => {
+    GlobalTextHistory.push({
+        time: Date.now(),
+        ...addition
+    });
+};
+
 /**
  * Major entry point for creating a BlockPy instance.
  * Two most important fields are `model` and `components`.
@@ -55,6 +64,14 @@ export class BlockPy {
             this.setAssignment(configuration, assignment, submission);
         }
         this.initMain();
+    }
+
+    getHistory() {
+        return GlobalTextHistory;
+    }
+
+    addHistory(history) {
+        addToGlobalHistory(history);
     }
 
     /**
@@ -893,7 +910,6 @@ export class BlockPy {
         components.dialog = new BlockPyDialog(main, container.find(".blockpy-dialog"));
         components.feedback = new BlockPyFeedback(main, container.find(".blockpy-feedback"));
         components.trace = new BlockPyTrace(main);
-        components.console = new BlockPyConsole(main, container.find(".blockpy-console"));
         components.engine = new BlockPyEngine(main);
         components.fileSystem = new BlockPyFileSystem(main);
         components.editors = new Editors(main, container.find(".blockpy-editor"));
@@ -902,6 +918,7 @@ export class BlockPy {
         components.server = new BlockPyServer(main);
         components.corgis = new BlockPyCorgis(main);
         components.history = new BlockPyHistory(main, container.find(".blockpy-history-toolbar"));
+        components.console = new BlockPyConsole(main, container.find(".blockpy-console"));
     }
 
     makeExtraSubscriptions() {

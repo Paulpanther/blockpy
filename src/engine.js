@@ -6,6 +6,7 @@ import {SampleConfiguration} from "./engine/sample";
 import {OnChangeConfiguration} from "./engine/on_change";
 import {OnEvalConfiguration} from "./engine/on_eval";
 import {OnSampleConfiguration} from "./engine/on_sample";
+import {addToGlobalHistory, GlobalTextHistory} from "./blockpy";
 
 /**
  * An object for executing Python code and passing the results along to interested components.
@@ -101,6 +102,7 @@ export class BlockPyEngine {
     }
 
     run() {
+        addToGlobalHistory({ action: "run" });
         this.configuration = this.configurations.run.use(this);
         let execution = this.execute().then(
             this.configuration.success.bind(this.configuration),
