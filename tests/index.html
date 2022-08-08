@@ -125,10 +125,10 @@
             // blockmirror = editor.components.editors.registered_[1].bm;
 
             // TODO enable
-            // window.onbeforeunload = e => {
-            //     e.returnValue = "Sure?"
-            //     return "Sure?";
-            // };
+            window.onbeforeunload = e => {
+                e.returnValue = "Sure?"
+                return "Sure?";
+            };
         });
 
         function download(filename, text) {
